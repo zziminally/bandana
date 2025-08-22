@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>밴드 공연 리스트</title>
+</head>
+<body>
+<h1>공연 밴드 리스트</h1>
+<ul>
+  {% for band in bands %}
+    <li><a href="{% url 'band_detail' band.id %}">{{ band.name }}</a></li>
+  {% endfor %}
+</ul>
+</body>
+</html>
