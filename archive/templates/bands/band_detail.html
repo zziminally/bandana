@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{{ band.name }}</title>
+</head>
+<body>
+<h1>{{ band.name }}</h1>
+<p>{{ band.description }}</p>
+<p>장르: {{ band.genre }}</p>
+
+<h3>구성원</h3>
+<ul>
+  {% for member in members %}
+    <li>{{ member.name }} - {{ member.role }}</li>
+  {% endfor %}
+</ul>
+
+<h3>노래 리스트</h3>
+<ul>
+  {% for song in songs %}
+    <li>{{ song.title }}</li>
+  {% endfor %}
+</ul>
+
+<h3>좋아요</h3>
+<form action="{% url 'like_band' band.id %}" method="post">
+  {% csrf_token %}
+  <button type="submit" {% if liked %}disabled{% endif %}>좋아요</button>
+</form>
+
+<h3>댓글</h3>
+<ul>
+  {% for comment in comments %}
+    <li>{{ comment.content }} ({{ comment.created_at }})</li>
+  {% empty %}
+    <li>댓글이 없습니다.</li>
+  {% endfor %}
+</ul>
+
+<h4>댓글 작성</h4>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">댓글 등록</button>
+</form>
+
+<a href="{% url 'band_list' %}">← 뒤로가기</a>
+</body>
+</html>
