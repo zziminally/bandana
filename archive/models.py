@@ -19,6 +19,7 @@ class Member(models.Model):
 class Song(models.Model):
     band = models.ForeignKey(Band, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
+    url = models.URLField(blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -26,6 +27,7 @@ class Song(models.Model):
 class Like(models.Model):
     band = models.ForeignKey(Band, on_delete=models.CASCADE)
     session_key = models.CharField(max_length=100)
+    
 
 class Comment(models.Model):
     band = models.ForeignKey(Band, on_delete=models.CASCADE)
