@@ -1,0 +1,37 @@
+{% extends 'bands/base.html' %}
+{% load static %}
+{% block title %}홈 | SOUND ARCHIVE{% endblock %}
+{% block head_extra %}
+  <script defer src="{% static 'bands/js/home.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<section class="home-wrap">
+  <!-- 밴드 리스트: 2열, 줄 간격 30px -->
+  <div class="band-grid">
+    {% for band in bands %}
+      <article class="band-card" data-band-id="{{ band.id }}">
+        <a href="{% url 'archive:detail' band.id %}" class="band-thumb-link" aria-label="{{ band.name }} 상세">
+          <div class="band-thumb">
+            <img
+              src="{% if band.profile_image %}{{ band.profile_image.url }}{% else %}{% static 'bands/images/home_profile.svg' %}{% endif %}"
+              alt="{{ band.name }} 이미지"
+              class="band-thumb-img">
+          </div>
+        </a>
+
+        <a href="{% url 'archive:detail' band.id %}" class="band-name">{{ band.name }}</a>
+
+        <div class="band-like">
+          <button class="heart-btn" type="button" aria-label="좋아요" data-liked="false">
+            <img src="{% static 'bands/images/home_heart_blank.svg' %}" alt="" class="heart-icon">
+          </button>
+          <span class="like-count">{{ band.likes_count }}</span>
+        </div>
+      </article>
+    {% empty %}
+      <p class="empty-text">등록된 밴드가 없습니다.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

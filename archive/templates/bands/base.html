@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=390, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>{% block title %}SOUND ARCHIVE{% endblock %}</title>
+
+  <!-- 글꼴: 시스템에 설치된 'Hancom Gothic' 우선 -->
+  <style>
+    @font-face {
+      font-family: 'Hancom Gothic';
+      src: local('Hancom Gothic'), local('한컴 고딕');
+      font-display: swap;
+    }
+  </style>
+
+  <link rel="stylesheet" href="{% static 'bands/css/styles.css' %}">
+  <script defer src="{% static 'bands/js/common.js' %}"></script>
+  {% block head_extra %}{% endblock %}
+</head>
+<body class="sa-body">
+  <div class="sa-app">
+    <!-- 상단바 (390px 가로를 꽉 채움) -->
+    <header class="sa-header">
+      <img src="{% static 'bands/images/upper_bar.svg' %}" alt="SOUND ARCHIVE" class="sa-header-img">
+    </header>
+
+    <main class="sa-main">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+  {% block body_extra %}{% endblock %}
+</body>
+</html>

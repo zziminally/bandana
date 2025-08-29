@@ -1,29 +1,41 @@
 from django.contrib import admin
-from .models import Band, Member, Song, Like, Comment
+from django.utils.html import format_html
+from .models import Band, Member, SetListItem, Comment
+
+
+class MemberInline(admin.TabularInline):
+    model = Member
+    extra = 1
+
+
+class SetListInline(admin.TabularInline):
+    model = SetListItem
+    extra = 1
+
 
 @admin.register(Band)
 class BandAdmin(admin.ModelAdmin):
-    list_display = ('name', 'genre')
-    search_fields = ('name', 'genre')
+    list_display = ('id', 'name', 'likes_count', 'profile_thumbnail', 'playlist_url')
+    readonly_fields = ('likes_count',)
+    inlines = [MemberInline, SetListInline]
+    search_fields = ('name',)
 
-@admin.register(Member)
-class MemberAdmin(admin.ModelAdmin):
-    list_display = ('name', 'role', 'band')
-    list_filter = ('band',)
-    search_fields = ('name', 'role')
+    def profile_thumbnail(self, obj):
+        if obj.profile_image:
+            return format_html(
+                '<img src="{}" style="height:48px;width:48px;border-radius:50%;object-fit:cover;" />',
+                obj.profile_image.url
+            )
+        return "-"
+    profile_thumbnail.short_description = "프로필"
 
-@admin.register(Song)
-class SongAdmin(admin.ModelAdmin):
-    list_display = ('title', 'band')
-    list_filter = ('band',)
-    search_fields = ('title',)
-
-@admin.register(Like)
-class LikeAdmin(admin.ModelAdmin):
-    list_display = ('band', 'session_key')
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('band', 'content', 'created_at')
+    list_display = ('id', 'band', 'short_text', 'created_at')
     list_filter = ('band', 'created_at')
-    search_fields = ('content',)
+    readonly_fields = ('created_at',)
+
+    def short_text(self, obj):
+        return obj.text[:60]
+    short_text.short_description = "내용"
