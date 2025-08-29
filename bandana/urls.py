@@ -24,4 +24,4 @@ urlpatterns = [
     path('', include('archive.urls')),           # 밴드 앱 URL 연결
 ] 
 
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

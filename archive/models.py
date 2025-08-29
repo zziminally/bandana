@@ -1,35 +1,52 @@
 from django.db import models
+from django.utils import timezone
 
 class Band(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField()
-    genre = models.CharField(max_length=50)
+    name = models.CharField(max_length=200)
+    profile_image = models.ImageField(upload_to='bands/profile/', blank=True, null=True)
+    description_image = models.ImageField(upload_to='bands/description/', blank=True, null=True)
+    playlist_url = models.URLField(blank=True, null=True)  # "플레이리스트 들으러 가기" 링크
+    likes_count = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.name
 
+
 class Member(models.Model):
-    band = models.ForeignKey(Band, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    role = models.CharField(max_length=50)
+    band = models.ForeignKey(Band, on_delete=models.CASCADE, related_name='members')
+    name = models.CharField(max_length=150)          # 멤버 이름
+    role = models.CharField(max_length=100, blank=True)  # 역할 (ex. Vocal)
+    affiliation = models.CharField(max_length=200, blank=True)  # 소속(대학/학과)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
 
     def __str__(self):
         return f"{self.name} ({self.role})"
 
-class Song(models.Model):
-    band = models.ForeignKey(Band, on_delete=models.CASCADE)
-    title = models.CharField(max_length=200)
-    url = models.URLField(blank=True, null=True)
+
+class SetListItem(models.Model):
+    band = models.ForeignKey(Band, on_delete=models.CASCADE, related_name='setlist')
+    title = models.CharField(max_length=250)   # 노래 제목
+    artist = models.CharField(max_length=200, blank=True)  # 가수
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
 
     def __str__(self):
-        return self.title
+        return f"{self.title} — {self.artist}"
 
-class Like(models.Model):
-    band = models.ForeignKey(Band, on_delete=models.CASCADE)
-    session_key = models.CharField(max_length=100)
-    
 
 class Comment(models.Model):
-    band = models.ForeignKey(Band, on_delete=models.CASCADE)
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    band = models.ForeignKey(Band, on_delete=models.CASCADE, related_name='comments')
+    text = models.TextField()
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ['-created_at']  # 최신 댓글 먼저 보여줌
+
+    def __str__(self):
+        return f"Comment #{self.pk} on {self.band.name}"

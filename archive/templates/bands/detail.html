@@ -1,0 +1,123 @@
+{% extends 'bands/base.html' %}
+{% load static %}
+{% block title %}{{ band.name }} | SOUND ARCHIVE{% endblock %}
+{% block head_extra %}
+  <script defer src="{% static 'bands/js/detail.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<section class="detail-wrap" data-band-id="{{ band.id }}">
+  <!-- 돌아가기 -->
+  <div class="detail-back">
+    <a href="{% url 'archive:home' %}" class="back-btn" aria-label="뒤로">
+      <img src="{% static 'bands/images/back_button.svg' %}" alt="뒤로가기">
+      <span class="sr-only">&lt; 돌아가기</span>
+    </a>
+  </div>
+
+  <!-- 프로필 원형 -->
+  <div class="detail-profile">
+    <div class="detail-profile-circle">
+      <img
+        src="{% if band.profile_image %}{{ band.profile_image.url }}{% else %}{% static 'bands/images/detail_profile.svg' %}{% endif %}"
+        alt="{{ band.name }} 프로필"
+        class="detail-profile-img">
+    </div>
+  </div>
+
+  <!-- 팀명 + 좋아요 -->
+  <div class="detail-title-like">
+    <h1 class="detail-name">{{ band.name }}</h1>
+    <div class="detail-like">
+      <button class="heart-btn" type="button" aria-label="좋아요" data-liked="false">
+        <img src="{% static 'bands/images/detail_heart_blank.svg' %}" alt="" class="heart-icon">
+      </button>
+      <span class="like-count">{{ band.likes_count }}</span>
+    </div>
+  </div>
+
+  <!-- 팀 설명 이미지 영역 -->
+  <div class="detail-desc-box">
+    {% if band.description_image %}
+      <img src="{{ band.description_image.url }}" alt="팀 설명 이미지" class="detail-desc-img">
+    {% else %}
+      <!-- 이미지가 없을 때 빈 영역 (회색 박스 유지) -->
+      <div class="detail-desc-placeholder"></div>
+    {% endif %}
+  </div>
+
+  <!-- Member 구역 -->
+  <section class="detail-section">
+    <h2 class="section-title">Member</h2>
+    <hr class="section-divider">
+    <ul class="member-list">
+      {% for m in band.members.all %}
+        <li class="member-item">
+          <span class="role-pill">{{ m.role|default:"" }}</span>
+          <span class="member-name">
+            {{ m.name }}{% if m.affiliation %} ({{ m.affiliation }}){% endif %}
+          </span>
+        </li>
+      {% empty %}
+        <li class="member-item empty-text">등록된 멤버 정보가 없습니다.</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <!-- Set List -->
+  <section class="detail-section">
+    <div class="setlist-head">
+      <h2 class="section-title">Set List</h2>
+      {% if band.playlist_url %}
+        <a href="{{ band.playlist_url }}" target="_blank" rel="noopener" class="playlist-link">플레이리스트 들으러 가기</a>
+      {% else %}
+        <span class="playlist-link disabled">플레이리스트 들으러 가기</span>
+      {% endif %}
+    </div>
+    <hr class="section-divider">
+    <ul class="setlist">
+      {% for s in band.setlist.all %}
+        <li class="setlist-item">
+          <span class="dot"></span>
+          <span class="song-title">{{ s.title }}</span>
+          <span class="dash">-</span>
+          <span class="song-artist">{{ s.artist }}</span>
+        </li>
+      {% empty %}
+        <li class="setlist-item empty-text">등록된 셋리스트가 없습니다.</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <!-- Comment -->
+  <section class="detail-section">
+    <h2 class="section-title">Comment</h2>
+    <hr class="section-divider">
+
+    <form id="comment-form" class="comment-form" action="{% url 'archive:add_comment' band.id %}" method="post">
+      {% csrf_token %}
+      <div class="comment-input">
+        <span class="anon-label">익명</span>
+        <textarea name="text" id="comment-text" rows="2"
+          placeholder="멤버들에게 응원의 메시지를 남겨주세요!" required></textarea>
+        <button class="comment-send" type="submit" aria-label="전송">
+          <img src="{% static 'bands/images/Messanger.svg' %}" alt="">
+        </button>
+      </div>
+    </form>
+
+    <!--hr class="section-divider divider-thin"-->
+
+    <ul id="comment-list" class="comment-list">
+      {% for c in band.comments.all %}
+        <li class="comment-item">
+          <div class="comment-text">{{ c.text }}</div>
+          <div class="comment-meta">{{ c.created_at|date:"Y-m-d H:i" }}</div>
+        </li>
+      {% empty %}
+        <li class="comment-item empty-text">첫 댓글을 남겨보세요!</li>
+      {% endfor %}
+    </ul>
+  </section>
+</section>
+{% endblock %}

@@ -1,0 +1,173 @@
+/* 공통 */
+:root{
+  --sa-green:#87CEB8;
+  --sa-green-dark:#4D9F84;
+  --sa-text:#464646;
+  --sa-gray:#F8F8F8;
+  --sa-gray-line:#E1E1E1;
+  --sa-divider:#B5B5B5;
+}
+
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; background:#fff; }
+.sa-body{ font-family:"Hancom Gothic", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif; color:var(--sa-text); }
+.sa-app{ width:390px; min-height:100vh; margin:0 auto; background:#fff; }
+.sa-header {
+  position: fixed;   /* 스크롤 내려도 고정 */
+  top: 0;
+  left: 0;
+  width: 390px;      /* 가로폭 고정 (현재 디자인에 맞게) */
+  z-index: 1000;     /* 다른 요소들 위에 올라오도록 */
+}
+.sa-header-img{ display:block; width:390px; height:auto; }
+.sa-main{ padding: 107px 0 24px 0; }
+
+/* 스크린리더 전용 */
+.sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
+
+/* 홈 */
+.home-wrap{ padding:24px 0 40px; }
+.band-grid{
+  width:100%;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:30px 0;    /* 세로 30px, 가로 0 (디자인 기준 카드 폭 고정) */
+  justify-items:center;
+}
+.band-card{
+  width:195px; /* 2열 합치면 390px */
+  display:flex; flex-direction:column; align-items:center;
+}
+.band-thumb{
+  width:160px; height:160px;
+  background:var(--sa-gray);
+  border:1px solid var(--sa-gray-line);
+  border-radius:80px;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden;
+  /*padding:6px 26px;*/
+}
+/*.band-thumb-img{ width:108px; height:148px; transform:rotate(0deg); object-fit:cover; }*/
+.band-thumb-img {
+  width:100%;   /* 부모에 맞추기 */
+  height:100%;
+  object-fit:contain;  /* 이미지 전체 보이도록 */
+}
+.band-thumb-link{ display:block; }
+.band-name{
+  margin-top:12px;
+  font-size:16px; font-weight:400; text-decoration:none; color:var(--sa-text);
+}
+.band-like{ display:flex; align-items:center; gap:6px; margin-top:6px; }
+.heart-btn{ border:0; background:none; padding:0; line-height:0; cursor:pointer; }
+.heart-icon{ width:20px; height:17px; }
+.like-count{ font-size:15px; }
+
+/* 상세 */
+.detail-wrap{ position:relative; padding-bottom:40px; }
+.detail-back{ padding:14px 15px 0; }
+.back-btn img{ width:73px; height:16px; display:block; }
+
+.detail-profile{ margin-top:28px; display:flex; justify-content:center; }
+.detail-profile-circle{
+  width:190px; height:190px; border-radius:9999px;
+  background:var(--sa-gray); border:1px solid var(--sa-gray-line);
+  position:relative; overflow:hidden;
+}
+/*.detail-profile-img{ width:128px; height:176px; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%) rotate(0deg); object-fit:cover; }*/
+.detail-profile-img {
+  width:100%;   /* 부모에 맞추기 */
+  height:100%;
+  object-fit:contain;  /* 이미지 전체 보이도록 */
+}
+
+.detail-title-like{
+  margin-top:24px; display:flex; flex-direction:column; align-items:center; gap:6px;
+}
+.detail-name{ font-size:25px; font-weight:700; line-height:1; margin:0; }
+.detail-like{ display:flex; align-items:center; gap:6px; }
+.detail-like .heart-icon{ width:20px; height:17px; }
+.detail-like .like-count{ font-size:20px; }
+
+/* 박스는 이미지가 없을 때만 유효 */
+.detail-desc-box {
+  margin-top: 26px;
+}
+
+/* 이미지 있을 때: 원본 사이즈 그대로 */
+.detail-desc-img {
+  display: block;
+  max-width: 390px;   /* 제한 해제 */
+  max-height: none;  /* 제한 해제 */
+}
+
+/* 이미지 없을 때만 회색 박스 */
+.detail-desc-placeholder {
+  width: 390px;
+  height: 350px;
+  background: var(--sa-gray);
+  border-top: 1px solid var(--sa-gray-line);
+  border-bottom: 1px solid var(--sa-gray-line);
+}
+
+.detail-section{ padding:18px 15px 0; }
+.section-title{ font-size:25px; font-weight:700; margin:0 0 8px; }
+.section-divider{
+  width:358px; height:0; border:none; border-top:0.7px solid var(--sa-divider);
+  margin:0 auto 14px;
+}
+.divider-thin{ margin-top:14px; }
+
+.member-list{ list-style:none; margin:0; padding:0; }
+.member-item{ display:flex; align-items:center; gap:12px; margin:10px 0; }
+.role-pill{
+  min-width:69px; height:28px; display:inline-flex; align-items:center; justify-content:center;
+  border-radius:6px; border:1px solid var(--sa-green); background-color:rgba(135,206,184,.8);
+  opacity:.6;
+  font-size:13px; font-weight:400; color:var(--sa-text);
+}
+.member-name{ font-size:13px; }
+
+.setlist-head{ display:flex; align-items:center; justify-content:space-between; }
+.playlist-link{ font-size:13px; color:var(--sa-green-dark); text-decoration:none; }
+.playlist-link.disabled{ opacity:.4; pointer-events:none; }
+
+.setlist{ list-style:none; margin:0; padding:0 0 6px; }
+.setlist-item{ position:relative; display:flex; align-items:center; gap:8px; padding-left:6px; margin:8px 0; }
+.setlist-item .dot{
+  width:14px; height:14px; border-radius:9999px; border:1px solid var(--sa-green);
+  background-color:rgba(135,206,184,.8); opacity:.6;
+}
+.song-title, .song-artist, .dash{ font-size:13px; }
+.dash{ margin:0 6px; }
+
+.comment-form{ padding-top:8px; }
+.comment-form, 
+.comment-form * {
+  font-family: inherit;
+}
+.comment-input{
+  width:359px; height:47px; margin:0 auto; border-radius:6px;
+  background:rgba(86, 86, 86, 0.107); position:relative;
+  display:flex; align-items:center; gap:8px; padding:7px 10px;
+}
+.anon-label{ color:var(--sa-green); font-weight:700; font-size:13px; }
+#comment-text{
+  flex:1; height:30px; border:none; background:transparent; color:#3e3e3ebc;
+  font-size:13px; outline:none; padding:6px 4px; resize:none; overflow:hidden;
+}
+#comment-text::placeholder {
+  color: #949393;       /* 연한 회색 */
+  opacity: 1;        /* 브라우저 기본 opacity 무시 */
+  font-size: 13px;   /* 필요하면 글씨 크기 조정 */
+}
+.comment-send{ border:0; background:none; padding:0; line-height:0; cursor:pointer; }
+.comment-send img{ width:24px; height:24px; }
+
+.comment-list{ list-style:none; margin:16px 0 0; padding:0 15px; }
+.comment-item{ padding:8px 0; border-top:0.7px solid var(--sa-divider); }
+.comment-item:first-child{ border-top:none; }
+.comment-text{ font-size:13px; }
+.comment-meta{ font-size:11px; opacity:.6; margin-top:4px; color:#666; }
+
+.empty-text{ color:#777; opacity:.8; font-size:13px; }

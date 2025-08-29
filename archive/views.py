@@ -1,57 +1,63 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from .models import Band, Member, Song, Like, Comment
+from django.shortcuts import get_object_or_404
+from django.views.generic import ListView, DetailView
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.views.decorators.http import require_POST, require_GET
+from django.db import transaction
+from django.db.models import F
+from .models import Band
 from .forms import CommentForm
-from django.http import JsonResponse
 
-def band_list(request):
-    bands = Band.objects.all()
-    return render(request, 'bands/band_list.html', {'bands': bands})
+class BandListView(ListView):
+    model = Band
+    template_name = 'bands/home.html'
+    context_object_name = 'bands'
+    queryset = Band.objects.all().prefetch_related('members', 'setlist')
 
-def band_detail(request, band_id):
-    band = get_object_or_404(Band, id=band_id)
-    members = Member.objects.filter(band=band)
-    songs = Song.objects.filter(band=band)
-    comments = Comment.objects.filter(band=band).order_by('-created_at')
+class BandDetailView(DetailView):
+    model = Band
+    template_name = 'bands/detail.html'
+    context_object_name = 'band'
 
-    session_key = request.session.session_key
-    if not session_key:
-        request.session.save()
-        session_key = request.session.session_key
-    liked = Like.objects.filter(band=band, session_key=session_key).exists()
-
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.band = band
-            comment.save()
-            return redirect('band_detail', band_id=band.id)
+@require_POST
+@transaction.atomic
+def like_band(request, pk):
+    band = get_object_or_404(Band, pk=pk)
+    action = request.POST.get('action')
+    if action == 'like':
+        Band.objects.filter(pk=pk).update(likes_count=F('likes_count') + 1)
+    elif action == 'unlike':
+        Band.objects.filter(pk=pk, likes_count__gt=0).update(likes_count=F('likes_count') - 1)
     else:
-        form = CommentForm()
+        return HttpResponseBadRequest('invalid action')
+    band.refresh_from_db(fields=['likes_count'])
+    return JsonResponse({'likes_count': band.likes_count})
 
-    likes_count = Like.objects.filter(band=band).count()
+@require_POST
+def add_comment(request, pk):
+    band = get_object_or_404(Band, pk=pk)
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        c = form.save(commit=False)
+        c.band = band
+        c.save()
+        return JsonResponse({
+            'id': c.id,
+            'text': c.text,
+            'created_at': c.created_at.strftime('%Y-%m-%d %H:%M'),
+        })
+    return JsonResponse({'errors': form.errors}, status=400)
 
-    return render(request, 'bands/band_detail.html', {
-        'band': band,
-        'members': members,
-        'songs': songs,
-        'comments': comments,
-        'liked': liked,
-        'likes_count': likes_count,
-        'form': form,
-    })
+@require_GET
+def band_stats(request, pk):
+    band = get_object_or_404(Band, pk=pk)
+    return JsonResponse({'id': band.id, 'likes_count': band.likes_count})
 
-def like_band(request, band_id):
-    band = get_object_or_404(Band, id=band_id)
-    session_key = request.session.session_key
-    if not session_key:
-        request.session.save()
-        session_key = request.session.session_key
-
-    liked = False
-    if not Like.objects.filter(band=band, session_key=session_key).exists():
-        Like.objects.create(band=band, session_key=session_key)
-        liked = True
-
-    likes_count = Like.objects.filter(band=band).count()
-    return JsonResponse({'liked': liked, 'likes_count': likes_count})
+@require_GET
+def comments_list(request, pk):
+    band = get_object_or_404(Band, pk=pk)
+    data = [{
+        'id': c.id,
+        'text': c.text,
+        'created_at': c.created_at.strftime('%Y-%m-%d %H:%M'),
+    } for c in band.comments.all()[:100]]
+    return JsonResponse({'comments': data})
