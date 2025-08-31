@@ -15,16 +15,16 @@ class Band(models.Model):
 
 class Member(models.Model):
     band = models.ForeignKey(Band, on_delete=models.CASCADE, related_name='members')
-    name = models.CharField(max_length=150)          # 멤버 이름
+    #name = models.CharField(max_length=150)          # 멤버 이름
     role = models.CharField(max_length=100, blank=True)  # 역할 (ex. Vocal)
-    affiliation = models.CharField(max_length=200, blank=True)  # 소속(대학/학과)
+    #affiliation = models.CharField(max_length=200, blank=True)  # 소속(대학/학과)
     order = models.PositiveIntegerField(default=0)
 
     class Meta:
         ordering = ['order']
 
     def __str__(self):
-        return f"{self.name} ({self.role})"
+        return f"{self.role}"
 
 
 class SetListItem(models.Model):

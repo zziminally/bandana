@@ -54,9 +54,9 @@
       {% for m in band.members.all %}
         <li class="member-item">
           <span class="role-pill">{{ m.role|default:"" }}</span>
-          <span class="member-name">
+          <!--span class="member-name">
             {{ m.name }}{% if m.affiliation %} ({{ m.affiliation }}){% endif %}
-          </span>
+          </span-->
         </li>
       {% empty %}
         <li class="member-item empty-text">등록된 멤버 정보가 없습니다.</li>
