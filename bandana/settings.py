@@ -25,8 +25,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = os.environ.get("DEBUG", "False").lower() in {"1","true","yes","y"}
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "False").lower() in {"1","true","yes","y"}
+#DEBUG = True
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split()
 # Render에서 제공하는 호스트 자동 추가(있을 때만)
@@ -89,8 +89,8 @@ DATABASES = {
     'default': dj_database_url.config(
         default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
         conn_max_age=600,
-        ssl_require=False,
-        #ssl_require=True,
+        #ssl_require=False,
+        ssl_require=True,
     )
 }
 
