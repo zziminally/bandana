@@ -14,7 +14,7 @@
         <a href="{% url 'archive:detail' band.id %}" class="band-thumb-link" aria-label="{{ band.name }} 상세">
           <div class="band-thumb">
             <img
-              src="{% if band.profile_image %}{{ band.profile_image.url }}{% else %}{% static 'bands/images/home_profile.svg' %}{% endif %}"
+              src="{% if band.profile_image %}{% static band.profile_image %}{% else %}{% static 'bands/images/home_profile.svg' %}{% endif %}"
               alt="{{ band.name }} 이미지"
               class="band-thumb-img">
           </div>

@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.templatetags.static import static
 from django.utils.html import format_html
 from .models import Band, Member, SetListItem, Comment
 
@@ -24,7 +25,7 @@ class BandAdmin(admin.ModelAdmin):
         if obj.profile_image:
             return format_html(
                 '<img src="{}" style="height:48px;width:48px;border-radius:50%;object-fit:cover;" />',
-                obj.profile_image.url
+                static(obj.profile_image)
             )
         return "-"
     profile_thumbnail.short_description = "프로필"

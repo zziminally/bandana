@@ -25,7 +25,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", "False").lower() in {"1","true","yes","y"}
+#DEBUG = os.environ.get("DEBUG", "False").lower() in {"1","true","yes","y"}
+DEBUG = True
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split()
 # Render에서 제공하는 호스트 자동 추가(있을 때만)
@@ -85,11 +86,12 @@ WSGI_APPLICATION = 'bandana.wsgi.application'
 
 # DB: 기본 sqlite → Render에선 DATABASE_URL 자동 주입(Postgres)
 DATABASES = {
-'default': dj_database_url.config(
-default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
-conn_max_age=600,
-ssl_require=True,
-)
+    'default': dj_database_url.config(
+        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
+        conn_max_age=600,
+        ssl_require=False,
+        #ssl_require=True,
+    )
 }
 
 
@@ -115,7 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'ko-kr'
+LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Seoul'
 

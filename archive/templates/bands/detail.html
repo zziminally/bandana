@@ -19,7 +19,7 @@
   <div class="detail-profile">
     <div class="detail-profile-circle">
       <img
-        src="{% if band.profile_image %}{{ band.profile_image.url }}{% else %}{% static 'bands/images/detail_profile.svg' %}{% endif %}"
+        src="{% if band.profile_image %}{% static band.profile_image %}{% else %}{% static 'bands/images/detail_profile.svg' %}{% endif %}"
         alt="{{ band.name }} 프로필"
         class="detail-profile-img">
     </div>
@@ -39,7 +39,7 @@
   <!-- 팀 설명 이미지 영역 -->
   <div class="detail-desc-box">
     {% if band.description_image %}
-      <img src="{{ band.description_image.url }}" alt="팀 설명 이미지" class="detail-desc-img">
+      <img src="{% static band.description_image %}" alt="팀 설명 이미지" class="detail-desc-img">
     {% else %}
       <!-- 이미지가 없을 때 빈 영역 (회색 박스 유지) -->
       <div class="detail-desc-placeholder"></div>

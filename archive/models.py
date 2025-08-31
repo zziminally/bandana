@@ -2,12 +2,35 @@ from django.db import models
 from django.utils import timezone
 
 class Band(models.Model):
+    PROFILE_IMAGE_CHOICES = [
+        ('bands/images/blue_profile.png', '파란 프로필'),
+        ('bands/images/undefined66_profile.png', 'Undefined66 프로필'),
+        ('bands/images/what4ever_profile.png', 'WHAT4EVER 프로필'),
+        ('bands/images/release_profile.png', '릴리즈 프로필'),
+        ('bands/images/jazzpeople_profile.jpg', '재찾사 프로필'),
+        ('bands/images/firstint_profile.png', '초심 프로필'),
+    ]
+    DES_IMAGE_CHOICES = [
+        ('bands/images/undefined66_des.jpg', 'Undefined66 소개'),
+        ('bands/images/what4ever_des.jpeg', 'WHAT4EVER 소개'),
+        ('bands/images/rhythm_des.jpeg', '리듬군단 소개'),
+        ('bands/images/release_des.jpeg', '릴리즈 소개'),
+        ('bands/images/baedangjoo_des.jpg', '배당주 소개'),
+        ('bands/images/entrophy_des.jpeg', '엔트로피 소개'),
+        ('bands/images/jazzpeople_des.jpeg', '재찾사 소개'),
+        ('bands/images/firstint_des.jpg', '초심 소개'),
+        ('bands/images/blue_des.png', '파란 소개'),
+        ('bands/images/hathow9y_des.jpeg', '해쏘웨이 소개'),
+    ]
     name = models.CharField(max_length=200)
-    profile_image = models.ImageField(upload_to='bands/profile/', blank=True, null=True)
-    description_image = models.ImageField(upload_to='bands/description/', blank=True, null=True)
+    profile_image = models.CharField(max_length=200, choices=PROFILE_IMAGE_CHOICES, blank=True, null=True)
+    description_image = models.CharField(max_length=200, choices=DES_IMAGE_CHOICES, blank=True, null=True)
     playlist_url = models.URLField(blank=True, null=True)  # "플레이리스트 들으러 가기" 링크
     likes_count = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ['id']
 
     def __str__(self):
         return self.name
