@@ -94,7 +94,9 @@
     <h2 class="section-title">Comment</h2>
     <hr class="section-divider">
 
-    <form id="comment-form" class="comment-form" action="{% url 'archive:add_comment' band.id %}" method="post">
+    <form id="comment-form" class="comment-form"
+          action="{% url 'archive:add_comment' band.id %}" method="post"
+          onsubmit="return false;">
       {% csrf_token %}
       <div class="comment-input">
         <span class="anon-label">익명</span>

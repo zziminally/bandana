@@ -8,19 +8,37 @@
   --sa-divider:#B5B5B5;
 }
 
-*{ box-sizing:border-box; }
-html,body{ margin:0; padding:0; background:#fff; }
-.sa-body{ font-family:"Hancom Gothic", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif; color:var(--sa-text); }
-.sa-app{ width:390px; min-height:100vh; margin:0 auto; background:#fff; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #d4d4d4; }
+.sa-body {
+  font-family: "Hancom Gothic", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+  color: var(--sa-text);
+}
+.sa-app {
+  max-width: 390px;   /* 최대 390px까지만 넓어짐 */
+  width: 100%;        /* 작은 화면에서는 100%로 줄어듦 */
+  min-height: 100vh;
+  margin: 0 auto;
+  background: #fff;
+}
 .sa-header {
-  position: fixed;   /* 스크롤 내려도 고정 */
+  position: fixed;
   top: 0;
   left: 0;
-  width: 390px;      /* 가로폭 고정 (현재 디자인에 맞게) */
-  z-index: 1000;     /* 다른 요소들 위에 올라오도록 */
+  width: 100%;        /* 부모(.sa-app)에 맞게 꽉 채움 */
+  max-width: 390px;   /* 너무 커지지 않도록 제한 */
+  margin: 0 auto;
+  right: 0;           /* 가운데 정렬 */
+  z-index: 1000;
 }
-.sa-header-img{ display:block; width:390px; height:auto; }
-.sa-main{ padding: 107px 0 24px 0; }
+.sa-header-img {
+  display: block;
+  width: 100%;        /* 반응형 */
+  height: auto;
+}
+.sa-main {
+  padding: 107px 0 24px 0;
+}
 
 /* 스크린리더 전용 */
 .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
@@ -121,10 +139,10 @@ html,body{ margin:0; padding:0; background:#fff; }
 .member-list{ list-style:none; margin:0; padding:0; }
 .member-item{ display:flex; align-items:center; gap:12px; margin:10px 0; }
 .role-pill{
-  min-width:69px; height:28px; display:inline-flex; align-items:center; justify-content:center;
+  padding: 0 10px; height:28px; display:inline-flex; align-items:center; justify-content:center;
   border-radius:6px; border:1px solid var(--sa-green); background-color:rgba(135,206,184,.8);
   opacity:.6;
-  font-size:13px; font-weight:400; color:var(--sa-text);
+  font-size:13px; font-weight:400; color:var(--sa-text); white-space: nowrap;
 }
 .member-name{ font-size:13px; }
 
@@ -140,6 +158,35 @@ html,body{ margin:0; padding:0; background:#fff; }
 }
 .song-title, .song-artist, .dash{ font-size:13px; }
 .dash{ margin:0 6px; }
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.comment-text {
+  flex: 1;
+  font-size: 13px;
+}
+
+.comment-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.comment-actions img.action-icon {
+  width: 40px;   /* svg px 크기에 맞춰 조정 가능 */
+  height: 11px;
+  cursor: pointer;
+}
+
+.comment-actions img.section-icon {
+  width: 11px;   /* svg px 크기에 맞춰 조정 가능 */
+  height: 11px;
+  cursor: pointer;
+}
 
 .comment-form{ padding-top:8px; }
 .comment-form, 
@@ -167,7 +214,7 @@ html,body{ margin:0; padding:0; background:#fff; }
 .comment-list{ list-style:none; margin:16px 0 0; padding:0 15px; }
 .comment-item{ padding:8px 0; border-top:0.7px solid var(--sa-divider); }
 .comment-item:first-child{ border-top:none; }
-.comment-text{ font-size:13px; }
-.comment-meta{ font-size:11px; opacity:.6; margin-top:4px; color:#666; }
+/*.comment-text{ font-size:13px; }*/
+.comment-meta{ font-size:11px; opacity:.6; margin-top:6px; color:#666; }
 
 .empty-text{ color:#777; opacity:.8; font-size:13px; }

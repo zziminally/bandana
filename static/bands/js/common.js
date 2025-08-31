@@ -1,7 +1,5 @@
-// 공통: CSRF, 좋아요 토글 상태 로컬 저장 (band 단위)
-
+// 공통: CSRF, 좋아요/댓글 로직
 (function () {
-  // CSRF 가져오기 (Django)
   function getCookie(name) {
     if (!document.cookie) return null;
     const cookies = document.cookie.split(';');
@@ -13,25 +11,25 @@
     }
     return null;
   }
+
   window.SA = {
     csrfToken: getCookie('csrftoken'),
 
-    // 로컬스토리지에 '좋아요 상태' 저장 (페이지간 UI 일치)
+    // 좋아요: sessionStorage 사용 → 새로고침 유지, 재접속시 초기화
     isLiked(bandId) {
       try {
-        return localStorage.getItem(`band:${bandId}:liked`) === '1';
+        return sessionStorage.getItem(`band:${bandId}:liked`) === '1';
       } catch { return false; }
     },
     setLiked(bandId, liked) {
       try {
-        if (liked) localStorage.setItem(`band:${bandId}:liked`, '1');
-        else localStorage.removeItem(`band:${bandId}:liked`);
+        if (liked) sessionStorage.setItem(`band:${bandId}:liked`, '1');
+        else sessionStorage.removeItem(`band:${bandId}:liked`);
       } catch {}
     },
 
-    // 서버에 좋아요/해제 요청
-    async toggleLike(bandId, likedNow) {
-      const action = likedNow ? 'like' : 'unlike';
+    async toggleLike(bandId, nextLiked) {
+      const action = nextLiked ? 'like' : 'unlike';
       const res = await fetch(`/bands/${bandId}/like/`, {
         method: 'POST',
         headers: {
@@ -41,17 +39,40 @@
         },
         body: new URLSearchParams({ action })
       });
-      if (!res.ok) {
-        throw new Error('like api error');
-      }
-      return res.json(); // {likes_count}
+      if (!res.ok) throw new Error('like api error');
+      return res.json();
     },
 
-    // 현재 카운트 동기화 (상세에서 특히)
     async fetchStats(bandId) {
-      const res = await fetch(`/bands/${bandId}/stats/`, { headers: { 'X-Requested-With': 'XMLHttpRequest' }});
+      const res = await fetch(`/bands/${bandId}/stats/`, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      });
       if (!res.ok) return null;
-      return res.json(); // {id, likes_count}
+      return res.json();
+    },
+
+    // 내가 쓴 댓글 기록 (localStorage → 재접속해도 유지)
+    addMyComment(id) {
+      try {
+        const arr = JSON.parse(localStorage.getItem('my-comments') || '[]');
+        if (!arr.includes(id)) {
+          arr.push(id);
+          localStorage.setItem('my-comments', JSON.stringify(arr));
+        }
+      } catch {}
+    },
+    isMyComment(id) {
+      try {
+        const arr = JSON.parse(localStorage.getItem('my-comments') || '[]');
+        return arr.includes(id);
+      } catch { return false; }
+    },
+    removeMyComment(id) {
+      try {
+        let arr = JSON.parse(localStorage.getItem('my-comments') || '[]');
+        arr = arr.filter(x => x !== id);
+        localStorage.setItem('my-comments', JSON.stringify(arr));
+      } catch {}
     }
   };
 })();
