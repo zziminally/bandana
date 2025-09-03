@@ -4,12 +4,13 @@ from django.utils import timezone
 class Band(models.Model):
     PROFILE_IMAGE_CHOICES = [
         ('bands/images/blue_profile.png', '파란 프로필'),
-        ('bands/images/undefined66_profile.png', 'Undefined66 프로필'),
+        ('bands/images/undefined66_profile.jpg', 'Undefined66 프로필'),
         ('bands/images/what4ever_profile.png', 'WHAT4EVER 프로필'),
         ('bands/images/release_profile.png', '릴리즈 프로필'),
         ('bands/images/jazzpeople_profile.jpg', '재찾사 프로필'),
         ('bands/images/firstint_profile.png', '초심 프로필'),
-        ('bands/images/rhythm_profile.jpg', '리듬군단 프로필'),
+        ('bands/images/rhythm_profile.png', '리듬군단 프로필'),
+        ('bands/images/entrophy_profile.png', '엔트로피 프로필'),
     ]
     DES_IMAGE_CHOICES = [
         ('bands/images/undefined66_des.jpg', 'Undefined66 소개'),
@@ -21,7 +22,7 @@ class Band(models.Model):
         ('bands/images/jazzpeople_des.jpeg', '재찾사 소개'),
         ('bands/images/firstint_des.jpg', '초심 소개'),
         ('bands/images/blue_des.png', '파란 소개'),
-        ('bands/images/hathow9y_des.jpeg', '해쏘웨이 소개'),
+        ('bands/images/hathow9y_des.jpg', '해쏘웨이 소개'),
     ]
     name = models.CharField(max_length=200)
     profile_image = models.CharField(max_length=200, choices=PROFILE_IMAGE_CHOICES, blank=True, null=True)
