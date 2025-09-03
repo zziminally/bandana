@@ -2,7 +2,7 @@
   const wrap = document.querySelector('.detail-wrap');
   if (!wrap) return;
 
-  const colors = ["#87CEB8", "#FFD580", "#FFB6C1", "#87CEFA", "#DDA0DD", "#f9ffb2ff", "#90b496ff"];
+  const colors = ["#FFB3BA", "#FFDFBA", "#FFFFBA", "#BAFFC9", "#BAE1FF", "#CBAEFF", "#FFB3F0", "#FFD6E0", "#D6FFB3", "#B3FFF5", "#87CEB8"];
   function darkenColor(hex, percent) {
     let num = parseInt(hex.slice(1), 16),
         r = (num >> 16) - (255 * percent),
