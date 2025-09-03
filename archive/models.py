@@ -9,6 +9,7 @@ class Band(models.Model):
         ('bands/images/release_profile.png', '릴리즈 프로필'),
         ('bands/images/jazzpeople_profile.jpg', '재찾사 프로필'),
         ('bands/images/firstint_profile.png', '초심 프로필'),
+        ('bands/images/rhythm_profile.jpg', '리듬군단 프로필'),
     ]
     DES_IMAGE_CHOICES = [
         ('bands/images/undefined66_des.jpg', 'Undefined66 소개'),
