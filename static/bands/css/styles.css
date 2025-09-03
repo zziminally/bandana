@@ -140,7 +140,7 @@ html, body { margin: 0; padding: 0; background: #d4d4d4; }
 .member-item{ margin: 0;/*display:flex; align-items:center; gap:12px; margin:10px 0;*/ }
 .role-pill{
   padding: 0 10px; height:28px; display:inline-flex; align-items:center; justify-content:center;
-  border-radius:6px; border:1px solid var(--sa-green); background-color:rgba(135,206,184,.8);
+  border-radius:6px; border:1px solid var(--sa-green); background-color:transparent;
   opacity:.6;
   font-size:13px; font-weight:400; color:var(--sa-text); white-space: nowrap;
 }

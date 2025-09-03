@@ -2,6 +2,20 @@
   const wrap = document.querySelector('.detail-wrap');
   if (!wrap) return;
 
+  const colors = ["#87CEB8", "#FFD580", "#FFB6C1", "#87CEFA", "#DDA0DD", "#f9ffb2ff", "#90b496ff"];
+  function darkenColor(hex, percent) {
+    let num = parseInt(hex.slice(1), 16),
+        r = (num >> 16) - (255 * percent),
+        g = ((num >> 8) & 0x00FF) - (255 * percent),
+        b = (num & 0x0000FF) - (255 * percent);
+    return `rgb(${Math.max(0, r)}, ${Math.max(0, g)}, ${Math.max(0, b)})`;
+  }
+  document.querySelectorAll(".role-pill").forEach(el => {
+    const bg = colors[Math.floor(Math.random() * colors.length)];
+    el.style.backgroundColor = bg;
+    el.style.borderColor = darkenColor(bg, 0.2);
+  });
+
   const bandId = Number(wrap.dataset.bandId);
 
   // 좋아요
